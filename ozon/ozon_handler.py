@@ -51,15 +51,16 @@ class OzonHandler:
     def update_price(self, prepared_products_lists: list):
         for prepared_products_list in prepared_products_lists:
             data = {'prices': prepared_products_list}
-            self.send_request(api_config.OZON_URL_PRICES_UPDATE, data)
+            anwswer = self.send_request(api_config.OZON_URL_PRICES_UPDATE, data)
             time.sleep(1)
+        print('ozon: цены обновлены')
 
     def update_stock(self, prepared_products_lists: list):
-
         for prepared_products_list in prepared_products_lists:
             data = {'stocks': prepared_products_list}
-            self.send_request(api_config.OZON_URL_STOCK_QUANTITY_UPDATE, data)
+            anwswer = self.send_request(api_config.OZON_URL_STOCK_QUANTITY_UPDATE_V2, data)
             time.sleep(1)
+        print('ozon: остатки обновлены')
 
     @staticmethod
     def send_request(url: str, data: dict):

@@ -1,4 +1,4 @@
-from product import Product
+from ozon.ozon_product import Product
 import api_config
 
 
@@ -55,7 +55,6 @@ class ProductHandler:
                     ozon_product.quantity_kalibron = self.__calculate_quantity(kalibron_product.quantity_kalibron)
                     break
             result_products.append(ozon_product)
-        print(f'Количество мерженных продуктов {len(result_products)}')
         return result_products
 
     @staticmethod
@@ -75,9 +74,9 @@ class ProductHandler:
                 product_for_send = {'auto_action_enabled': 'UNKNOWN',
                                     'currency_code': 'RUB',
                                     'min_price': '',
-                                    'offer_id': product.offer_id,
-                                    'old_price': round(product.price_kalibron * 1.06),
-                                    'price': product.price_kalibron,
+                                    'offer_id': str(product.offer_id),
+                                    'old_price': str(round(product.price_kalibron * 1.06)),
+                                    'price': str(product.price_kalibron),
                                     'product_id': product.product_id}
                 result_products_limit.append(product_for_send)
                 limit_count += 1
@@ -98,7 +97,9 @@ class ProductHandler:
             if product.quantity_ozon != product.quantity_kalibron:
                 product_for_send = {"offer_id": str(product.offer_id),
                                     "product_id": int(product.product_id),
-                                    "stock": int(product.quantity_kalibron)}
+                                    "stock": int(product.quantity_kalibron),
+                                    "warehouse_id": api_config.OZON_WAREHOUSE_ID}
+
                 result_products_limit.append(product_for_send)
                 limit_count += 1
                 if limit_count == api_config.OZON_STOCK_UPDATE_LIMIT:

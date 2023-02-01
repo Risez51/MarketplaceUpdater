@@ -3,12 +3,13 @@ from xml.dom import minidom
 from xml.dom.minidom import Document
 import urllib.request
 
-from product import Product
+from ozon.ozon_product import Product
+from wildberries.wb_product import Product as WbProduct
 
 
 class KalibronHandler:
 
-    def get_products(self) -> list[Product]:
+    def get_products_ozon(self) -> list[Product]:
         link: str = api_config.XML_LINK
         xml_document = self.get_dom(link)
         offers = xml_document.getElementsByTagName('offer')
@@ -24,6 +25,27 @@ class KalibronHandler:
                         product.price_kalibron = round(float(node.getAttribute('price')) * 1.2)
                     elif node.tagName == 'qty':
                         product.quantity_kalibron = self.__get_node_value(node)
+            result_products.append(product)
+        print(f'Найдено товаров: {len(result_products)} шт.')
+        print('----------------------------------------------------------------------------------')
+        return result_products
+
+    def get_products_wb(self):
+        link: str = api_config.XML_LINK
+        xml_document = self.get_dom(link)
+        offers = xml_document.getElementsByTagName('offer')
+        print('Получен список товаров с tdkalibron.ru - XML')
+        result_products = []
+        for offer in offers:
+            product = WbProduct()
+            for node in offer.childNodes:
+                if node.nodeType == 1:
+                    if node.tagName == 'id':
+                        product.vendor_code = self.__get_node_value(node)
+                    elif node.tagName == 'price':
+                        product.kalibron_price = round(float(node.getAttribute('price')) * 1.2)
+                    elif node.tagName == 'qty':
+                        product.kalibron_quantity = self.__get_node_value(node)
             result_products.append(product)
         print(f'Найдено товаров: {len(result_products)} шт.')
         print('----------------------------------------------------------------------------------')
