@@ -1,23 +1,31 @@
 from wildberries.wb_worker import WbWorker
-from wildberries.wb_handler import WbHandler
-import api_config
+from ozon.ozon_worker import OzonWorker
+from ozon.ozon_product import Product
+import sys
 
 
 def main():
-    # OZON price and warehouse update
-    # try:
-    #     worker = OzonWorker()
-    #     worker.update_price()
-    #     worker.update_stock()
-    # except Exception as e:
-    #     print('Произошла ошибка, обратитесь к разрабочику')
-    #     print(f'Error key: {e}')
+    ozon()
 
-    # Список номенклатеры на вб
-    # WbWorker().get_products_from_wb()
-    wb_worker = WbWorker()
-    wb_worker.update_price()
-    wb_worker.update_stock()
+def wb():
+    try:
+        wb_worker = WbWorker()
+        wb_worker.update_price()
+        # wb_worker.update_stock()
+        # wb_worker.to_excel()
+    except Exception as e:
+        print('Произошла ошибка, обратитесь к разработчику')
+        print(e)
+
+
+def ozon():
+    try:
+        ozon_worker = OzonWorker()
+        ozon_worker.update_stock()
+        ozon_worker.update_price()
+    except Exception as e:
+        print('Произошла ошибка, обратитесь к разработчику')
+        print(e)
 
 
 if __name__ == '__main__':

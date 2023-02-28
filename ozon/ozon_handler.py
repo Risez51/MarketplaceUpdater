@@ -53,6 +53,7 @@ class OzonHandler:
             data = {'prices': prepared_products_list}
             anwswer = self.send_request(api_config.OZON_URL_PRICES_UPDATE, data)
             time.sleep(1)
+            print(anwswer)
         print('ozon: цены обновлены')
 
     def update_stock(self, prepared_products_lists: list):
@@ -60,6 +61,7 @@ class OzonHandler:
             data = {'stocks': prepared_products_list}
             anwswer = self.send_request(api_config.OZON_URL_STOCK_QUANTITY_UPDATE_V2, data)
             time.sleep(1)
+            print(anwswer)
         print('ozon: остатки обновлены')
 
     @staticmethod

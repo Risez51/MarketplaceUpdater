@@ -1,6 +1,7 @@
 from wildberries.wb_handler import WbHandler
 from kalibron_handler import KalibronHandler
 import api_config
+from file_manager import FileManager
 
 
 class WbWorker:
@@ -36,16 +37,28 @@ class WbWorker:
                 wb_product.kalibron_price = 0
             if wb_product.kalibron_quantity == '':
                 wb_product.kalibron_quantity = 0
+        print(f'Получены данные с Wildberries')
 
     def update_price(self):
         data = [product.convert_to_price_update() for product in self.result_products]
+        print('-' * 40)
+        print('Данные для отправки запроса')
         print(data)
         # Раскомментировать для обновления
-        # WbHandler().send_request_post(api_config.WB_URL_PRICE_UPLOAD, data)
+        WbHandler().send_request_post(api_config.WB_URL_PRICE_UPLOAD, data)
 
     def update_stock(self):
-        data = [product.convert_to_stock_update() for product in self.result_products]
-        data = {'stocks': data}
-        print(data)
+        data = [product.convert_to_stock_update() for product in self.result_products if product.convert_to_stock_update() is not None]
+        data_1 = []
+        for product in self.result_products:
+            if product is not None and product.wb_quantity > 0:
+                data_1.append(product.convert_to_stock_update())
+        print('-' * 40)
+        print('Данные для отправки запроса')
+        print(data_1)
         # Раскомментировать для обновления
-        # WbHandler().send_request_put(api_config.WB_URL_STOCK_UPLOAD, {'stocks': data})
+        WbHandler().send_request_put(api_config.WB_URL_STOCK_UPLOAD, {'stocks': data_1})
+
+    def to_excel(self):
+        data = [product.convert_to_excel() for product in self.result_products]
+        FileManager().to_excel(data)

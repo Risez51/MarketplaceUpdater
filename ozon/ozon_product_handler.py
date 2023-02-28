@@ -60,7 +60,7 @@ class ProductHandler:
     @staticmethod
     def __calculate_quantity(quantity):
         result = 0
-        if int(quantity) >= 30:
+        if int(quantity) >= 20:
             result = int(int(quantity) / 100 * 20)
         return result
 

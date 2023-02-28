@@ -1,6 +1,7 @@
 from ozon.ozon_handler import OzonHandler
 from kalibron_handler import KalibronHandler
 from ozon.ozon_product_handler import ProductHandler
+from file_manager import FileManager
 
 
 class OzonWorker:
@@ -29,6 +30,13 @@ class OzonWorker:
         merged_products = ProductHandler().get_merged_products_for_stock(ozon_products, self.__kalibron_products)
         prepared_products_lists = ProductHandler().get_prepared_products_for_stock_update(merged_products)
         # print(f'Количество запросов на обновление {len(prepared_products_lists)} шт.')
-        # FileManager().to_excel(prepared_products_lists[0])
+        FileManager().to_excel(prepared_products_lists[0])
         # Отправка данных на ozon.ru
         OzonHandler().update_stock(prepared_products_lists)
+
+    def get_stock_items(self):
+        stock = OzonHandler().get_info_stock_items()
+        FileManager().to_excel(stock[0]['result']['items'])
+        for item in stock[0]['result']['items']:
+            print(item)
+

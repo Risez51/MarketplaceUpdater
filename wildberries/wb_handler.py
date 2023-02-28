@@ -33,21 +33,33 @@ class WbHandler:
     @staticmethod
     def send_request_post(url: str, data):
         answer = requests.post(url, json=data, headers=api_config.WB_HEADERS)
+        print(f'POST: Код ответа: {answer}')
         content = answer.content
         content = json.loads(content.decode('utf-8'))
+        print('POST: Server response: ')
+        print(content)
         return content
 
     @staticmethod
     def send_request_get(url: str):
         answer = requests.get(url, headers=api_config.WB_HEADERS)
+        print(f'GET: Код ответа: {answer}')
         content = answer.content
         content = json.loads(content.decode('utf-8'))
+        print('GET: Server response: ')
+        print(content)
         return content
 
     @staticmethod
-    def send_request_put(url: str, data):
-        answer = requests.put(url, data=data, headers=api_config.WB_HEADERS)
+    def send_request_put(url: str,  data):
+        answer = requests.put(url,
+                              json=data,
+                              headers=api_config.WB_HEADERS)
+        print(f'PUT: Код ответа: {answer}')
         content = answer.content
         content = json.loads(content.decode('utf-8'))
+        print('PUT: Server response: ')
+        print(content)
         return content
+
 

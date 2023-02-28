@@ -25,10 +25,24 @@ class Product:
                f'Штрихкод: {self.skus}'
 
     def convert_to_price_update(self):
-        return {'nmId': self.nm_id,
-                'price': self.kalibron_price}
+        if self.nm_id == 113298574:
+            price = int(self.kalibron_price)
+            if price > 0:
+                return {'nmId': self.nm_id,
+                        'price': int(self.kalibron_price) + 67}
+            else:
+                return {'nmId': self.nm_id,
+                        'price': int(self.kalibron_price)}
+        else:
+            if int(self.kalibron_price) > 0:
+                return {'nmId': self.nm_id,
+                        'price': int(self.kalibron_price) + 66}
+            else:
+                return {'nmId': self.nm_id,
+                        'price': int(self.kalibron_price)}
 
     def convert_to_stock_update(self):
+        #if self.__calculate_quantity(self.kalibron_quantity) > 0:
         return {'sku': self.skus,
                 'amount': self.__calculate_quantity(self.kalibron_quantity)}
 
@@ -38,3 +52,13 @@ class Product:
         if int(quantity) >= 10:
             result = int(int(quantity) / 100 * 20)
         return result
+
+    def convert_to_excel(self):
+        return {'Артикул_tdk': self.vendor_code,
+                'Артикул_wb': self.nm_id,
+                'Цена_tdk': self.kalibron_price,
+                'Цена_wb': self.wb_price,
+                'Остаток_tdk': self.__calculate_quantity(self.kalibron_quantity),
+                'Остаток_wb': self.wb_quantity,
+                'Штрихкод': self.skus}
+
